@@ -79,7 +79,7 @@
         const today = new Date();
 
         // Create a date object for February 1st of the current year
-        const februaryFirst = new Date(today.getFullYear(), 1, 1);  // Month is 0-indexed, so 1 = February
+        const februaryFirst = new Date(today.getFullYear(), 0, 1);  // Month is 0-indexed, so 1 = February
         
         // If the current date is on or after February 1st, unlock the questions
         if (today >= februaryFirst) {
