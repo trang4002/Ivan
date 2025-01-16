@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta tags for character encoding and responsive design -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questions for My Valentine</title>
+
+    <!-- Basic CSS styles for the page layout and design -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            margin-top: 50px;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        h1 {
+            color: #ff3366;
+        }
+        button {
+            background-color: #ff3366;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #ff6699;
+        }
+        .question {
+            margin: 20px 0;
+        }
+        .question input {
+            padding: 10px;
+            width: 80%;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Questions for My Valentine</h1>
+        <!-- Container for content: initial lock message and the question section -->
+        <div id="content-container">
+            <!-- Message shown when the page is locked -->
+            <div id="lock-message">
+                <p>The questions are locked until February 1st. Please come back then!</p>
+            </div>
+            <!-- Container for questions (hidden initially) -->
+            <div id="question-container" style="display: none;">
+                <div class="question">
+                    <!-- Placeholder text for the first question -->
+                    <p id="question-text">Question 1</p>
+                    <!-- Input field for the user's answer -->
+                    <input type="text" id="answer" placeholder="Your answer here" />
+                </div>
+                <!-- Button to go to the next question -->
+                <button id="next-button" onclick="askNextQuestion()">Next Question</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get the current date
+        const today = new Date();
+
+        // Create a date object for February 1st of the current year
+        const februaryFirst = new Date(today.getFullYear(), 1, 1);  // Month is 0-indexed, so 1 = February
+        
+        // If the current date is on or after February 1st, unlock the questions
+        if (today >= februaryFirst) {
+            // Hide the lock message and show the question section
+            document.getElementById('lock-message').style.display = 'none';
+            document.getElementById('question-container').style.display = 'block';
+        }
+
+        // Array of questions (you can modify these later)
+        const questions = [
+            "Question 1", // Replace with your first question
+            "Question 2", // Replace with your second question
+            "Question 3", // Replace with your third question
+            "Question 4", // Replace with your fourth question
+            "Question 5", // Replace with your fifth question
+            "Question 6", // Replace with your sixth question
+            "Question 7", // Replace with your seventh question
+            "Question 8", // Replace with your eighth question
+            "Question 9", // Replace with your ninth question
+            "Question 10" // Replace with your tenth question
+        ];
+
+        // Keeps track of which question is currently being shown
+        let currentQuestionIndex = 0;
+
+        // Function to handle moving to the next question
+        function askNextQuestion() {
+            // Get the current answer input value
+            const answer = document.getElementById('answer').value;
+
+            // If the user hasn't answered the question, alert them and stop
+            if (answer === "") {
+                alert("Please answer the question!");
+                return;
+            }
+
+            // Move to the next question by incrementing the question index
+            currentQuestionIndex++;
+
+            // If there are more questions left, show the next question
+            if (currentQuestionIndex < questions.length) {
+                document.getElementById('question-text').innerText = questions[currentQuestionIndex];
+                document.getElementById('answer').value = ''; // Clear the input field for the next question
+            } else {
+                // If all questions have been answered, show the final Valentine’s question
+                document.getElementById('question-text').innerText = "Will you be my Valentine?";
+                document.getElementById('answer').style.display = "none"; // Hide the input box for the last question
+                document.getElementById('next-button').innerText = "Yes, I Will!"; // Change the button text
+                document.getElementById('next-button').onclick = () => {
+                    alert("Yay! I am so happy! 💖"); // Show a confirmation message when he clicks 'Yes'
+                };
+            }
+        }
+    </script>
+</body>
+</html>
