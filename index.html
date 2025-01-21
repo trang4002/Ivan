@@ -1,85 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"> <!-- Specifies character encoding to UTF-8 -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Makes the page responsive for mobile devices -->
-    <title>Pop Quiz</title> <!-- Sets the page title -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pop Quiz</title>
     <style>
-        /* Basic styles for the body */
         body {
-            font-family: Arial, sans-serif; /* Sets font style */
-            text-align: center; /* Centers text */
-            background-color: #F7F5DF; /* Sets background color */
-            margin: 0; /* Removes default margin */
-            padding: 0; /* Removes default padding */
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #F7F5DF;
+            margin: 0;
+            padding: 0;
         }
 
-        /* Styles for the quiz container */
         .container {
-            margin-top: 50px; /* Adds space from the top */
-            background-color: #FAD9F3; /* Light pink background */
-            padding: 30px; /* Adds padding inside the container */
-            border-radius: 10px; /* Rounds container corners */
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Adds subtle shadow */
-            max-width: 600px; /* Sets maximum width of the container */
-            margin-left: auto; /* Centers container horizontally */
-            margin-right: auto; /* Centers container horizontally */
+            margin-top: 50px;
+            background-color: #FAD9F3;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        /* Styles for the main heading */
         h1 {
-            color: #ff3366; /* Sets text color to pink */
+            color: #ff3366;
         }
 
-        /* Styles for the buttons */
         button {
-            background-color: #ff3366; /* Pink button color */
-            color: white; /* White text color */
-            border: none; /* Removes default border */
-            padding: 10px 20px; /* Adds padding inside button */
-            font-size: 16px; /* Sets font size */
-            cursor: pointer; /* Changes cursor to pointer on hover */
-            border-radius: 5px; /* Rounds button corners */
+            background-color: #ff3366;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
         }
 
-        /* Changes button color on hover */
         button:hover {
-            background-color: #ff6699; /* Lighter pink */
+            background-color: #ff6699;
         }
 
-        /* Styles for the question block */
         .question {
-            margin: 20px 0; /* Adds space above and below questions */
+            margin: 20px 0;
         }
 
-        /* Styles for labels */
         label {
-            display: block; /* Makes labels block-level */
-            margin: 10px 0; /* Adds spacing between options */
+            display: block;
+            margin: 10px 0;
         }
 
-        /* Styles for feedback messages */
         .feedback {
-            margin-top: 20px; /* Adds space above feedback text */
-            font-weight: bold; /* Makes text bold */
+            margin-top: 20px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Main heading -->
         <h1>Pop Quiz</h1>
-        <!-- Container to dynamically load questions -->
         <div id="question-container"></div>
     </div>
 
     <script>
-        // Array of questions with text, options, and the correct answer index
         const questions = [
             {
-                text: "What is my major?", // Question text
-                options: ["Mechanical Engineering", "Electro-mechanical Engineering", "Robotic Engineering", "Mechatronic Engineering"], // Answer options
-                correct: 1 // Index of the correct option
+                text: "What is my major?",
+                options: ["Mechanical Engineering", "Electro-mechanical Engineering", "Robotic Engineering", "Mechatronic Engineering"],
+                correct: 1
             },
             {
                 text: "What is my favorite color?",
@@ -123,85 +112,101 @@
             }
         ];
 
-        let currentQuestionIndex = 0; // Tracks the current question
-        let score = 0; // Tracks the user's score
+        let currentQuestionIndex = 0;
+        let score = 0;
 
-        // Function to display a question
         function displayQuestion() {
-            const question = questions[currentQuestionIndex]; // Get the current question
-            const container = document.getElementById('question-container'); // Select the container for questions
+            const question = questions[currentQuestionIndex];
+            const container = document.getElementById('question-container');
 
-            // Build HTML for the question and its options
             let html = `<div class="question">
-                            <p>${question.text}</p>`; // Add question text
+                            <p id="question-text">${question.text}</p>`;
             question.options.forEach((option, index) => {
                 html += `<label>
                             <input type="radio" name="option" value="${index}">
                             ${option}
-                        </label>`; // Add radio buttons for each option
+                        </label>`;
             });
             html += `</div>
-                     <button onclick="checkAnswer()">Submit Answer</button>`; // Add the submit button
-            container.innerHTML = html; // Update the container with the question HTML
+                     <button id="submit-button" onclick="checkAnswer()">Submit Answer</button>`;
+            container.innerHTML = html;
         }
 
-        // Function to check the user's answer
         function checkAnswer() {
-            const selectedOption = document.querySelector('input[name="option"]:checked'); // Get the selected option
-            const container = document.getElementById('question-container'); // Select the question container
+            const selectedOption = document.querySelector('input[name="option"]:checked');
 
             if (!selectedOption) {
-                alert("Please select an answer!"); // Alert if no answer is selected
-                return; // Exit the function if no answer is selected
+                alert("Please select an answer!");
+                return;
             }
 
-            const answerIndex = parseInt(selectedOption.value); // Get the index of the selected answer
-            const isCorrect = answerIndex === questions[currentQuestionIndex].correct; // Check if the answer is correct
+            const answerIndex = parseInt(selectedOption.value);
+            const isCorrect = answerIndex === questions[currentQuestionIndex].correct;
 
-            // Update score if the answer is correct
             if (isCorrect) {
-                score++; // Increment score
-            }
-
-            // Show feedback and the correct answer
-            const feedback = isCorrect ? "Correct! 🎉" : "Wrong! ❌"; // Feedback message
-            const correctAnswer = questions[currentQuestionIndex].options[questions[currentQuestionIndex].correct]; // Get the correct answer
-            container.innerHTML = `<div class="feedback">
-                                        <p>${feedback}</p>
-                                        <p>The correct answer was: <strong>${correctAnswer}</strong></p>
-                                        <button onclick="nextQuestion()">Next Question</button>
-                                   </div>`; // Show feedback and next question button
-        }
-
-        // Function to go to the next question or end the quiz
-        function nextQuestion() {
-            currentQuestionIndex++; // Increment the question index
-            if (currentQuestionIndex < questions.length) {
-                displayQuestion(); // Show the next question
+                score++;
+                alert("Correct!");
             } else {
-                endQuiz(); // End the quiz if there are no more questions
+                alert("Wrong answer!");
+            }
+
+            nextQuestion();
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < questions.length) {
+                displayQuestion();
+            } else {
+                if (score === questions.length) {
+                    showValentineQuestion();
+                } else {
+                    lockOutQuiz();
+                }
             }
         }
 
-        // Function to end the quiz
-        function endQuiz() {
-            const container = document.getElementById('question-container'); // Select the question container
+        function showValentineQuestion() {
+            const container = document.getElementById('question-container');
+            container.innerHTML = `
+                <div class="question">
+                    <p>Will you be my Valentine? 💖</p>
+                    <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExNWkxeDF0OTkyZXJpc25jajA1bmVjajM2aWVibHVxeXEyMWVpOTFkbyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ZyNQFqZLFUhr2/giphy.gif" alt="Be my Valentine!" style="width: 300px; margin: 20px 0;">
+                    <button onclick="confirmValentine()">Yes, I Will!</button>
+                </div>`;
+        }
+
+        function confirmValentine() {
+            alert("Yay! I am so happy! 💖");
+        }
+
+        function lockOutQuiz() {
+            const lockTime = new Date().getTime() + 60 * 60 * 1000; // Lock for 1 hour
+            localStorage.setItem("quizLockedUntil", lockTime);
+
+            const container = document.getElementById('question-container');
             container.innerHTML = `<div class="feedback">
-                                        <p>Quiz Complete! 🎉</p>
-                                        <p>Your score: ${score}/${questions.length}</p> <!-- Show final score -->
-                                        <button onclick="restartQuiz()">Restart Quiz</button> <!-- Restart button -->
+                                        <p>You didn’t get all the answers right. Please come back in 1 hour!</p>
                                    </div>`;
         }
 
-        // Function to restart the quiz
-        function restartQuiz() {
-            currentQuestionIndex = 0; // Reset question index
-            score = 0; // Reset score
-            displayQuestion(); // Show the first question again
+        function checkQuizLock() {
+            const lockedUntil = localStorage.getItem("quizLockedUntil");
+            if (lockedUntil && new Date().getTime() < lockedUntil) {
+                const timeLeft = Math.round((lockedUntil - new Date().getTime()) / 60000);
+                document.getElementById('question-container').innerHTML = `
+                    <div class="feedback">
+                        <p>You’re locked out! Please try again in ${timeLeft} minutes.</p>
+                    </div>`;
+                return true;
+            }
+            return false;
         }
 
-        // Show the first question when the page loads
-        displayQuestion();
+        if (!checkQuizLock()) {
+            displayQuestion();
+        }
     </script>
 </body>
 </html>
