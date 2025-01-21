@@ -1,138 +1,209 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Meta tags for character encoding and responsive design -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Questions for My Valentine</title>
-
-    <!-- Basic CSS styles for the page layout and design -->
+    <meta charset="UTF-8"> <!-- Specifies character encoding to UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Makes the page responsive for mobile devices -->
+    <title>Pop Quiz</title> <!-- Sets the page title -->
     <style>
+        /* Basic styles for the body */
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 0;
+            font-family: Arial, sans-serif; /* Sets font style */
+            text-align: center; /* Centers text */
+            background-color: #F7F5DF; /* Sets background color */
+            margin: 0; /* Removes default margin */
+            padding: 0; /* Removes default padding */
         }
+
+        /* Styles for the quiz container */
         .container {
-            margin-top: 50px;
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+            margin-top: 50px; /* Adds space from the top */
+            background-color: #FAD9F3; /* Light pink background */
+            padding: 30px; /* Adds padding inside the container */
+            border-radius: 10px; /* Rounds container corners */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Adds subtle shadow */
+            max-width: 600px; /* Sets maximum width of the container */
+            margin-left: auto; /* Centers container horizontally */
+            margin-right: auto; /* Centers container horizontally */
         }
+
+        /* Styles for the main heading */
         h1 {
-            color: #ff3366;
+            color: #ff3366; /* Sets text color to pink */
         }
+
+        /* Styles for the buttons */
         button {
-            background-color: #ff3366;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
+            background-color: #ff3366; /* Pink button color */
+            color: white; /* White text color */
+            border: none; /* Removes default border */
+            padding: 10px 20px; /* Adds padding inside button */
+            font-size: 16px; /* Sets font size */
+            cursor: pointer; /* Changes cursor to pointer on hover */
+            border-radius: 5px; /* Rounds button corners */
         }
+
+        /* Changes button color on hover */
         button:hover {
-            background-color: #ff6699;
+            background-color: #ff6699; /* Lighter pink */
         }
+
+        /* Styles for the question block */
         .question {
-            margin: 20px 0;
+            margin: 20px 0; /* Adds space above and below questions */
         }
-        .question input {
-            padding: 10px;
-            width: 80%;
-            border-radius: 5px;
-            border: 1px solid #ddd;
+
+        /* Styles for labels */
+        label {
+            display: block; /* Makes labels block-level */
+            margin: 10px 0; /* Adds spacing between options */
+        }
+
+        /* Styles for feedback messages */
+        .feedback {
+            margin-top: 20px; /* Adds space above feedback text */
+            font-weight: bold; /* Makes text bold */
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Questions for My Valentine</h1>
-        <!-- Container for content: initial lock message and the question section -->
-        <div id="content-container">
-            <!-- Message shown when the page is locked -->
-            <div id="lock-message">
-                <p>The questions are locked until February 1st. Please come back then!</p>
-            </div>
-            <!-- Container for questions (hidden initially) -->
-            <div id="question-container" style="display: none;">
-                <div class="question">
-                    <!-- Placeholder text for the first question -->
-                    <p id="question-text">Question 1</p>
-                    <!-- Input field for the user's answer -->
-                    <input type="text" id="answer" placeholder="Your answer here" />
-                </div>
-                <!-- Button to go to the next question -->
-                <button id="next-button" onclick="askNextQuestion()">Next Question</button>
-            </div>
-        </div>
+        <!-- Main heading -->
+        <h1>Pop Quiz</h1>
+        <!-- Container to dynamically load questions -->
+        <div id="question-container"></div>
     </div>
 
     <script>
-        // Get the current date
-        const today = new Date();
-
-        // Create a date object for February 1st of the current year
-        const februaryFirst = new Date(today.getFullYear(), 0, 1);  // Month is 0-indexed, so 1 = February
-        
-        // If the current date is on or after February 1st, unlock the questions
-        if (today >= februaryFirst) {
-            // Hide the lock message and show the question section
-            document.getElementById('lock-message').style.display = 'none';
-            document.getElementById('question-container').style.display = 'block';
-        }
-
-        // Array of questions (you can modify these later)
+        // Array of questions with text, options, and the correct answer index
         const questions = [
-            "Question 1", // Replace with your first question
-            "Question 2", // Replace with your second question
-            "Question 3", // Replace with your third question
-            "Question 4", // Replace with your fourth question
-            "Question 5", // Replace with your fifth question
-            "Question 6", // Replace with your sixth question
-            "Question 7", // Replace with your seventh question
-            "Question 8", // Replace with your eighth question
-            "Question 9", // Replace with your ninth question
-            "Question 10" // Replace with your tenth question
+            {
+                text: "What is my major?", // Question text
+                options: ["Mechanical Engineering", "Electro-mechanical Engineering", "Robotic Engineering", "Mechatronic Engineering"], // Answer options
+                correct: 1 // Index of the correct option
+            },
+            {
+                text: "What is my favorite color?",
+                options: ["Blue", "Pink", "Yellow", "Green"],
+                correct: 0
+            },
+            {
+                text: "What is the primary muscle responsible for hip extension?",
+                options: ["Hamstring", "Gluteus Maximus", "Quadriceps", "Adductors"],
+                correct: 1
+            },
+            {
+                text: "What is my favorite vegetable?",
+                options: ["Carrot", "Broccoli", "Cucumber", "Spinach"],
+                correct: 2
+            },
+            {
+                text: "What is my favorite perfume?",
+                options: ["Chanel No. 5", "Daisy by Marc Jacobs", "Black Opium by YSL", "Prada Paradox"],
+                correct: 3
+            },
+            {
+                text: "Solve this math equation: ∫(x^2)dx",
+                options: ["(x^2)/2 + C", "(x^2)/2", "(x^3)/3 + C", "(x^3)/3"],
+                correct: 2
+            },
+            {
+                text: "Where was I born?",
+                options: ["Coplay", "Allentown", "Whitehall", "Vietnam"],
+                correct: 1
+            },
+            {
+                text: "How tall are you?",
+                options: ["5'8\"", "5'10\"", "6'0\"", "6'2\""],
+                correct: 1
+            },
+            {
+                text: "Did you lie on that last question?",
+                options: ["Yes", "No", "Maybe"],
+                correct: 0
+            }
         ];
 
-        // Keeps track of which question is currently being shown
-        let currentQuestionIndex = 0;
+        let currentQuestionIndex = 0; // Tracks the current question
+        let score = 0; // Tracks the user's score
 
-        // Function to handle moving to the next question
-        function askNextQuestion() {
-            // Get the current answer input value
-            const answer = document.getElementById('answer').value;
+        // Function to display a question
+        function displayQuestion() {
+            const question = questions[currentQuestionIndex]; // Get the current question
+            const container = document.getElementById('question-container'); // Select the container for questions
 
-            // If the user hasn't answered the question, alert them and stop
-            if (answer === "") {
-                alert("Please answer the question!");
-                return;
+            // Build HTML for the question and its options
+            let html = `<div class="question">
+                            <p>${question.text}</p>`; // Add question text
+            question.options.forEach((option, index) => {
+                html += `<label>
+                            <input type="radio" name="option" value="${index}">
+                            ${option}
+                        </label>`; // Add radio buttons for each option
+            });
+            html += `</div>
+                     <button onclick="checkAnswer()">Submit Answer</button>`; // Add the submit button
+            container.innerHTML = html; // Update the container with the question HTML
+        }
+
+        // Function to check the user's answer
+        function checkAnswer() {
+            const selectedOption = document.querySelector('input[name="option"]:checked'); // Get the selected option
+            const container = document.getElementById('question-container'); // Select the question container
+
+            if (!selectedOption) {
+                alert("Please select an answer!"); // Alert if no answer is selected
+                return; // Exit the function if no answer is selected
             }
 
-            // Move to the next question by incrementing the question index
-            currentQuestionIndex++;
+            const answerIndex = parseInt(selectedOption.value); // Get the index of the selected answer
+            const isCorrect = answerIndex === questions[currentQuestionIndex].correct; // Check if the answer is correct
 
-            // If there are more questions left, show the next question
+            // Update score if the answer is correct
+            if (isCorrect) {
+                score++; // Increment score
+            }
+
+            // Show feedback and the correct answer
+            const feedback = isCorrect ? "Correct! 🎉" : "Wrong! ❌"; // Feedback message
+            const correctAnswer = questions[currentQuestionIndex].options[questions[currentQuestionIndex].correct]; // Get the correct answer
+            container.innerHTML = `<div class="feedback">
+                                        <p>${feedback}</p>
+                                        <p>The correct answer was: <strong>${correctAnswer}</strong></p>
+                                        <button onclick="nextQuestion()">Next Question</button>
+                                   </div>`; // Show feedback and next question button
+        }
+
+        // Function to go to the next question or end the quiz
+        function nextQuestion() {
+            currentQuestionIndex++; // Increment the question index
             if (currentQuestionIndex < questions.length) {
-                document.getElementById('question-text').innerText = questions[currentQuestionIndex];
-                document.getElementById('answer').value = ''; // Clear the input field for the next question
+                displayQuestion(); // Show the next question
             } else {
-                // If all questions have been answered, show the final Valentine’s question
-                document.getElementById('question-text').innerText = "Will you be my Valentine?";
-                document.getElementById('answer').style.display = "none"; // Hide the input box for the last question
-                document.getElementById('next-button').innerText = "Yes, I Will!"; // Change the button text
-                document.getElementById('next-button').onclick = () => {
-                    alert("Yay! I am so happy! 💖"); // Show a confirmation message when he clicks 'Yes'
-                };
+                endQuiz(); // End the quiz if there are no more questions
             }
         }
+
+        // Function to end the quiz
+        function endQuiz() {
+            const container = document.getElementById('question-container'); // Select the question container
+            container.innerHTML = `<div class="feedback">
+                                        <p>Quiz Complete! 🎉</p>
+                                        <p>Your score: ${score}/${questions.length}</p> <!-- Show final score -->
+                                        <button onclick="restartQuiz()">Restart Quiz</button> <!-- Restart button -->
+                                   </div>`;
+        }
+
+        // Function to restart the quiz
+        function restartQuiz() {
+            currentQuestionIndex = 0; // Reset question index
+            score = 0; // Reset score
+            displayQuestion(); // Show the first question again
+        }
+
+        // Show the first question when the page loads
+        displayQuestion();
     </script>
 </body>
 </html>
+
+
