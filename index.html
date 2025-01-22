@@ -129,7 +129,7 @@
         }
 
         function setLockout() {
-            const lockoutDuration = 60 * 60 * 1000; // 1 hour in milliseconds
+            const lockoutDuration = 30 * 60 * 1000; // 1 hour in milliseconds
             const lockoutEndTime = Date.now() + lockoutDuration;
             localStorage.setItem("lockoutTime", lockoutEndTime.toString());
         }
