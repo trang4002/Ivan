@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pop Quiz</title>
+    <title>POP QUIZ (Hint: dont get any wrong or else)</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,7 +12,6 @@
             margin: 0;
             padding: 0;
         }
-
         .container {
             margin-top: 50px;
             background-color: #FAD9F3;
@@ -23,11 +22,9 @@
             margin-left: auto;
             margin-right: auto;
         }
-
         h1 {
             color: #ff3366;
         }
-
         button {
             background-color: #ff3366;
             color: white;
@@ -37,90 +34,79 @@
             cursor: pointer;
             border-radius: 5px;
         }
-
         button:hover {
             background-color: #ff6699;
         }
-
         .question {
             margin: 20px 0;
         }
-
         label {
             display: block;
             margin: 10px 0;
         }
-
         .feedback {
             margin-top: 20px;
             font-weight: bold;
         }
+        .valentine-container {
+            display: none;
+        }
+        .valentine-container img {
+            max-width: 100%;
+            height: auto;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
+    <!-- Music Elements -->
+    <audio id="background-music" loop>
+        <source src="audio/kahoot.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <audio id="valentine-music">
+        <source src="audio/cupid.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Quiz Container -->
+    <div class="container" id="quiz-container">
         <h1>Pop Quiz</h1>
         <div id="question-container"></div>
     </div>
 
+    <!-- Valentine Container -->
+    <div class="valentine-container" id="valentine-container">
+        <h1>Will You Be My Valentine? 💖</h1>
+        <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExMWFoaGVpeDRxZ20zOHk0bnM5ZHhuc2FrZmFkaW85aDIzdXJkMDc5MiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Fu3OjBQiCs3s0ZuLY3/giphy.gif" alt="Happy Valentine GIF">
+    </div>
+
     <script>
         const questions = [
-            {
-                text: "What is my major?",
-                options: ["Mechanical Engineering", "Electro-mechanical Engineering", "Robotic Engineering", "Mechatronic Engineering"],
-                correct: 1
-            },
-            {
-                text: "What is my favorite color?",
-                options: ["Blue", "Pink", "Yellow", "Green"],
-                correct: 0
-            },
-            {
-                text: "What is the primary muscle responsible for hip extension?",
-                options: ["Hamstring", "Gluteus Maximus", "Quadriceps", "Adductors"],
-                correct: 1
-            },
-            {
-                text: "What is my favorite vegetable?",
-                options: ["Carrot", "Broccoli", "Cucumber", "Spinach"],
-                correct: 2
-            },
-            {
-                text: "What is my favorite perfume?",
-                options: ["Chanel No. 5", "Daisy by Marc Jacobs", "Black Opium by YSL", "Prada Paradox"],
-                correct: 3
-            },
-            {
-                text: "Solve this math equation: ∫(x^2)dx",
-                options: ["(x^2)/2 + C", "(x^2)/2", "(x^3)/3 + C", "(x^3)/3"],
-                correct: 2
-            },
-            {
-                text: "Where was I born?",
-                options: ["Coplay", "Allentown", "Whitehall", "Vietnam"],
-                correct: 1
-            },
-            {
-                text: "How tall are you?",
-                options: ["5'8\"", "5'10\"", "6'0\"", "6'2\""],
-                correct: 1
-            },
-            {
-                text: "Did you lie on that last question?",
-                options: ["Yes", "No", "Maybe"],
-                correct: 0
-            }
+            { text: "What is my major?", options: ["Mechanical Engineering", "Electro-mechanical Engineering", "Robotic Engineering", "Mechatronic Engineering"], correct: 1 },
+            { text: "What is my favorite color?", options: ["Blue", "Pink", "Yellow", "Green"], correct: 0 },
+            { text: "What is the primary muscle responsible for hip extension?", options: ["Hamstring", "Gluteus Maximus", "Quadriceps", "Adductors"], correct: 1 },
+            { text: "What is my favorite vegetable?", options: ["Carrot", "Broccoli", "Cucumber", "Spinach"], correct: 2 },
+            { text: "What is my favorite perfume?", options: ["Chanel No. 5", "Daisy by Marc Jacobs", "Black Opium by YSL", "Prada Paradox"], correct: 3 },
+            { text: "Solve this math equation: ∫(x^2)dx", options: ["(x^2)/2 + C", "(x^2)/2", "(x^3)/3 + C", "(x^3)/3"], correct: 2 },
+            { text: "Where was I born?", options: ["Coplay", "Allentown", "Whitehall", "Vietnam"], correct: 1 },
+            { text: "How tall are you?", options: ["5'8\"", "5'10\"", "6'0\"", "6'2\""], correct: 1 },
+            { text: "Did you lie on that last question?", options: ["Yes", "No", "Maybe"], correct: 0 }
         ];
 
         let currentQuestionIndex = 0;
         let score = 0;
 
+        const backgroundMusic = document.getElementById("background-music");
+        const valentineMusic = document.getElementById("valentine-music");
+
+        // Start background music
+        backgroundMusic.play();
+
         function displayQuestion() {
             const question = questions[currentQuestionIndex];
-            const container = document.getElementById('question-container');
+            const container = document.getElementById("question-container");
 
-            let html = `<div class="question">
-                            <p id="question-text">${question.text}</p>`;
+            let html = `<div class="question"><p>${question.text}</p>`;
             question.options.forEach((option, index) => {
                 html += `<label>
                             <input type="radio" name="option" value="${index}">
@@ -128,87 +114,42 @@
                         </label>`;
             });
             html += `</div>
-                     <button id="submit-button" onclick="checkAnswer()">Submit Answer</button>`;
+                     <button onclick="checkAnswer()">Submit Answer</button>`;
             container.innerHTML = html;
         }
 
         function checkAnswer() {
             const selectedOption = document.querySelector('input[name="option"]:checked');
-
             if (!selectedOption) {
                 alert("Please select an answer!");
                 return;
             }
 
             const answerIndex = parseInt(selectedOption.value);
-            const isCorrect = answerIndex === questions[currentQuestionIndex].correct;
-
-            if (isCorrect) {
+            if (answerIndex === questions[currentQuestionIndex].correct) {
                 score++;
-                alert("Correct!");
-            } else {
-                alert("Wrong answer!");
             }
 
-            nextQuestion();
-        }
-
-        function nextQuestion() {
             currentQuestionIndex++;
-
             if (currentQuestionIndex < questions.length) {
                 displayQuestion();
             } else {
-                if (score === questions.length) {
-                    showValentineQuestion();
-                } else {
-                    lockOutQuiz();
-                }
+                showValentineScreen();
             }
         }
 
-        function showValentineQuestion() {
-            const container = document.getElementById('question-container');
-            container.innerHTML = `
-                <div class="question">
-                    <p>Will you be my Valentine? 💖</p>
-                    <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExNWkxeDF0OTkyZXJpc25jajA1bmVjajM2aWVibHVxeXEyMWVpOTFkbyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ZyNQFqZLFUhr2/giphy.gif" alt="Be my Valentine!" style="width: 300px; margin: 20px 0;">
-                    <button onclick="confirmValentine()">Yes, I Will!</button>
-                </div>`;
+        function showValentineScreen() {
+            backgroundMusic.pause();
+            valentineMusic.play();
+
+            document.getElementById("quiz-container").style.display = "none";
+            document.getElementById("valentine-container").style.display = "block";
         }
 
-        function confirmValentine() {
-            alert("Yay! I am so happy! 💖");
-        }
-
-        function lockOutQuiz() {
-            const lockTime = new Date().getTime() + 60 * 60 * 1000; // Lock for 1 hour
-            localStorage.setItem("quizLockedUntil", lockTime);
-
-            const container = document.getElementById('question-container');
-            container.innerHTML = `<div class="feedback">
-                                        <p>You didn’t get all the answers right. Please come back in 1 hour!</p>
-                                   </div>`;
-        }
-
-        function checkQuizLock() {
-            const lockedUntil = localStorage.getItem("quizLockedUntil");
-            if (lockedUntil && new Date().getTime() < lockedUntil) {
-                const timeLeft = Math.round((lockedUntil - new Date().getTime()) / 60000);
-                document.getElementById('question-container').innerHTML = `
-                    <div class="feedback">
-                        <p>You’re locked out! Please try again in ${timeLeft} minutes.</p>
-                    </div>`;
-                return true;
-            }
-            return false;
-        }
-
-        if (!checkQuizLock()) {
-            displayQuestion();
-        }
+        displayQuestion();
     </script>
 </body>
 </html>
+
 
 
