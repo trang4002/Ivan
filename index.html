@@ -66,6 +66,17 @@
                 opacity: 0;
             }
         }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .correct {
+            color: green;
+        }
+        .wrong {
+            color: red;
+        }
     </style>
 </head>
 <body>
@@ -83,6 +94,7 @@
     <div class="container" id="quiz-container">
         <h1>Pop Quiz</h1>
         <div id="question-container"></div>
+        <div id="result"></div>
     </div>
 
     <!-- Valentine Container -->
@@ -128,6 +140,9 @@
             html += `</div>
                      <button onclick="checkAnswer()">Submit Answer</button>`;
             container.innerHTML = html;
+
+            // Clear the result message for the new question
+            document.getElementById("result").textContent = "";
         }
 
         function checkAnswer() {
@@ -137,12 +152,23 @@
                 return;
             }
 
-            currentQuestionIndex++;
-            if (currentQuestionIndex < questions.length) {
-                displayQuestion();
+            const result = document.getElementById("result");
+            if (parseInt(selectedOption.value) === questions[currentQuestionIndex].correct) {
+                result.textContent = "Correct!";
+                result.className = "correct";
             } else {
-                showValentineScreen();
+                result.textContent = "Wrong!";
+                result.className = "wrong";
             }
+
+            currentQuestionIndex++;
+            setTimeout(() => {
+                if (currentQuestionIndex < questions.length) {
+                    displayQuestion();
+                } else {
+                    showValentineScreen();
+                }
+            }, 1500); // Wait 1.5 seconds before moving to the next question
         }
 
         function showValentineScreen() {
@@ -157,7 +183,7 @@
             const button = document.getElementById("valentine-button");
             const gif = document.getElementById("valentine-gif");
 
-            gif.src = "https://media.giphy.com/media/oe33xf3B50fsc/giphy.gif";
+            gif.src = "https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2x0dDFzcHJsMXNmNWhrd2Jmd2x6ODZxajl6cjF6OWtlMnYwdG42ayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/WEiKBTaESHHhK/giphy.gif";
             button.style.animation = "explode 1s ease-out forwards";
             setTimeout(() => button.remove(), 1000);
         }
@@ -166,6 +192,7 @@
     </script>
 </body>
 </html>
+
 
 
 
