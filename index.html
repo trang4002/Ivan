@@ -66,17 +66,6 @@
                 opacity: 0;
             }
         }
-        #result {
-            margin-top: 20px;
-            font-size: 18px;
-            font-weight: bold;
-        }
-        .correct {
-            color: green;
-        }
-        .wrong {
-            color: red;
-        }
     </style>
 </head>
 <body>
@@ -94,7 +83,6 @@
     <div class="container" id="quiz-container">
         <h1>Pop Quiz</h1>
         <div id="question-container"></div>
-        <div id="result"></div>
     </div>
 
     <!-- Valentine Container -->
@@ -119,12 +107,38 @@
         ];
 
         let currentQuestionIndex = 0;
+        let isLockedOut = checkLockout();
 
-        const backgroundMusic = document.getElementById("background-music");
-        const valentineMusic = document.getElementById("valentine-music");
+        if (isLockedOut) {
+            displayLockoutMessage();
+        } else {
+            const backgroundMusic = document.getElementById("background-music");
+            backgroundMusic.play();
+            displayQuestion();
+        }
 
-        // Start background music
-        backgroundMusic.play();
+        function checkLockout() {
+            const lockoutTime = localStorage.getItem("lockoutTime");
+            if (lockoutTime) {
+                const now = Date.now();
+                if (now < parseInt(lockoutTime)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function setLockout() {
+            const lockoutDuration = 60 * 60 * 1000; // 1 hour in milliseconds
+            const lockoutEndTime = Date.now() + lockoutDuration;
+            localStorage.setItem("lockoutTime", lockoutEndTime.toString());
+        }
+
+        function displayLockoutMessage() {
+            const container = document.getElementById("quiz-container");
+            container.innerHTML = `<h1>You're locked out!</h1>
+                                   <p>You can try again in 1 hour.</p>`;
+        }
 
         function displayQuestion() {
             const question = questions[currentQuestionIndex];
@@ -140,9 +154,6 @@
             html += `</div>
                      <button onclick="checkAnswer()">Submit Answer</button>`;
             container.innerHTML = html;
-
-            // Clear the result message for the new question
-            document.getElementById("result").textContent = "";
         }
 
         function checkAnswer() {
@@ -152,23 +163,19 @@
                 return;
             }
 
-            const result = document.getElementById("result");
-            if (parseInt(selectedOption.value) === questions[currentQuestionIndex].correct) {
-                result.textContent = "Correct!";
-                result.className = "correct";
-            } else {
-                result.textContent = "Wrong!";
-                result.className = "wrong";
+            const question = questions[currentQuestionIndex];
+            if (parseInt(selectedOption.value) !== question.correct) {
+                setLockout();
+                displayLockoutMessage();
+                return;
             }
 
             currentQuestionIndex++;
-            setTimeout(() => {
-                if (currentQuestionIndex < questions.length) {
-                    displayQuestion();
-                } else {
-                    showValentineScreen();
-                }
-            }, 1500); // Wait 1.5 seconds before moving to the next question
+            if (currentQuestionIndex < questions.length) {
+                displayQuestion();
+            } else {
+                showValentineScreen();
+            }
         }
 
         function showValentineScreen() {
@@ -187,11 +194,10 @@
             button.style.animation = "explode 1s ease-out forwards";
             setTimeout(() => button.remove(), 1000);
         }
-
-        displayQuestion();
     </script>
 </body>
 </html>
+
 
 
 
