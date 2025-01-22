@@ -107,38 +107,12 @@
         ];
 
         let currentQuestionIndex = 0;
-        let isLockedOut = checkLockout();
 
-        if (isLockedOut) {
-            displayLockoutMessage();
-        } else {
-            const backgroundMusic = document.getElementById("background-music");
-            backgroundMusic.play();
-            displayQuestion();
-        }
+        const backgroundMusic = document.getElementById("background-music");
+        const valentineMusic = document.getElementById("valentine-music");
 
-        function checkLockout() {
-            const lockoutTime = localStorage.getItem("lockoutTime");
-            if (lockoutTime) {
-                const now = Date.now();
-                if (now < parseInt(lockoutTime)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        function setLockout() {
-            const lockoutDuration = 30 * 60 * 1000; // 1 hour in milliseconds
-            const lockoutEndTime = Date.now() + lockoutDuration;
-            localStorage.setItem("lockoutTime", lockoutEndTime.toString());
-        }
-
-        function displayLockoutMessage() {
-            const container = document.getElementById("quiz-container");
-            container.innerHTML = `<h1>You're locked out!</h1>
-                                   <p>You can try again in 1 hour.</p>`;
-        }
+        // Start background music
+        backgroundMusic.play();
 
         function displayQuestion() {
             const question = questions[currentQuestionIndex];
@@ -149,7 +123,7 @@
                 html += `<label>
                             <input type="radio" name="option" value="${index}">
                             ${option}
-                        </label>`;
+                         </label>`;
             });
             html += `</div>
                      <button onclick="checkAnswer()">Submit Answer</button>`;
@@ -163,11 +137,12 @@
                 return;
             }
 
-            const question = questions[currentQuestionIndex];
-            if (parseInt(selectedOption.value) !== question.correct) {
-                setLockout();
-                displayLockoutMessage();
-                return;
+            const selectedValue = parseInt(selectedOption.value);
+
+            if (selectedValue === questions[currentQuestionIndex].correct) {
+                alert("Correct!");
+            } else {
+                alert("Wrong! Keep trying...");
             }
 
             currentQuestionIndex++;
@@ -194,9 +169,12 @@
             button.style.animation = "explode 1s ease-out forwards";
             setTimeout(() => button.remove(), 1000);
         }
+
+        displayQuestion();
     </script>
 </body>
 </html>
+
 
 
 
